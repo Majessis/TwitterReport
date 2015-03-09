@@ -72,7 +72,7 @@ def main(argv):
                 if not browser.is_element_present_by_css('.route-account_suspended'):
                     browser.find_by_css('.user-dropdown').click()
                     browser.find_by_css('li.report-text button[type="button"]').click()
-                    browser.find_by_css("input[type='radio'][value='spam']").click()
+                    browser.find_by_css("input[type='radio'][value='spam']").click
                     browser.find_by_css('.new-report-flow-next-button').click()
                     followers = browser.find_by_css('a[data-nav="followers"] .ProfileNav-value').value;
                     msg = url.strip()+' - ' + followers + ' Followers'
