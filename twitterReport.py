@@ -13,27 +13,27 @@ def main(argv):
         opts, args = getopt.getopt(argv,"hi:u:",["file=","user="])
     except getopt.GetoptError:
         print 'twitterReport.py -u <Twitter username> -i <file>'
-        print 'Le fichier des profiles doit comporter une URL par ligne ++'
+        print 'The account list must have only 1 url per line ++'
         sys.exit(2)
 
     for opt, arg in opts:
         if opt == '-h':
             print 'twitterReport.py -u <Twitter username> -i <file.txt>'
-            print 'Le fichier des profiles doit comporter une URL par ligne'
+            print 'The account list must have only 1 account per line'
             sys.exit()
         elif opt in ("-i", "--file"):
             txt = arg
         elif opt in ("-u", "--user"):
             username = arg
 
-    password = raw_input("Enter your twitter password : ")
+    password = raw_input("Enter your twitter password: ")
 
     try:
         username
         txt
     except getopt.GetoptError:
         print 'twitterReport.py -u <Twitter username> -i <file>'
-        print 'Le fichier des profiles doit comporter une URL par ligne'
+        print 'The account list must have only 1 account per line'
         sys.exit()
 
     with Browser() as browser:
@@ -44,7 +44,7 @@ def main(argv):
         try:
             file = open(txt, 'r')
         except:
-            print "Impossible d'ouvrir le fichier"
+            print "Cannot open file"
 
         for line in file:
             try:
@@ -54,9 +54,8 @@ def main(argv):
                 if not browser.is_element_present_by_css('.route-account_suspended'):
                     browser.find_by_css('.user-dropdown').click()
                     browser.find_by_css('li.block-or-report-text button[type="button"]').click()
-                    browser.uncheck('block_user')
-                    browser.check('also_report')
-                    browser.find_by_css('.report-tweet-report-button').click()
+                    browser.find_by_css("input[type='radio'][value='spam']").click()
+                    browser.find_by_css('.new-report-flow-next-button').click()
                     followers = browser.find_by_css('a[data-nav="followers"] .ProfileNav-value').value;
                     msg = url.strip()+' - ' + followers + ' Followers'
                     with open("log_reported_"+date+".txt", "a") as log:
@@ -73,7 +72,7 @@ def main(argv):
                 print msg
 
             except KeyboardInterrupt:
-                print 'Quit by keyboard interrupt sequence !'
+                print 'Quit by keyboard interrupt sequence!'
                 break
             except HttpResponseError:
                 msg = line.strip()+' - Error'
